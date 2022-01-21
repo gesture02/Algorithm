@@ -1,18 +1,19 @@
 import sys
-def dfs():
-    if len(s) == m:
-        print(*s)
+
+def solve(index):
+    if index == m:
+        sys.stdout.write(' '.join(map(str, answer)) + '\n')
         return
+
     for i in range(1, n+1):
-        if not visited[i]:
-            visited[i] = 1
-            s.append(i)
-            dfs()
-            visited[i] = 0
-            s.pop()
+        if check[i]: continue
+        check[i] = 1
+        answer[index] = i
+        solve(index+1)
+        check[i] = 0
 
 n, m = map(int, sys.stdin.readline().split())
-visited = [0] * (n+1)
-s = []
+check = [0] * (n + 1)
+answer = [0] * m
 
-dfs()
+solve(0)
