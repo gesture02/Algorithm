@@ -1,46 +1,50 @@
 import sys
 
-def check(idx):
+def check(index):
     sums = 0
-    for i in range(idx, -1, -1):
-        sums += result[i]
-        if sums == 0 and S[i][idx] != 0:
-            return False
-        elif sums > 0 and S[i][idx] <= 0:
-            return False
-        elif sums < 0 and S[i][idx] >= 0:
-            return False
+    for i in range(index, -1, -1):
+        sums += answer[i]
+        if s[i][index] > 0:
+            if sums <= 0:
+                return False
+        elif s[i][index] == 0:
+            if sums != 0:
+                return False
+        elif s[i][index] < 0:
+            if sums >= 0:
+                return False
     return True
 
-def answer(depth):
-    global result
-
-    if depth == n:
+def solve(index):
+    if index == n:
         return True
 
-    if S[depth][depth] == 0:
-        result[depth] = 0
-        return answer(depth+1)
+    if s[index][index] == 0:
+        answer[index] = 0
+        return check(index) and solve(index+1)
 
     for i in range(1, 11):
-        result[depth] = S[depth][depth] * i
-        if check(depth) and answer(depth+1):
+        answer[index] = s[index][index] * i
+        if check(index) and solve(index + 1):
             return True
+
     return False
 
-
 n = int(sys.stdin.readline().rstrip())
-input = list(sys.stdin.readline().rstrip())
-S = [[0] * n for _ in range(n)]
-result = [0] * n
+inputs = list(sys.stdin.readline().rstrip())
+s = [[0] * n for _ in range(n)]
+answer = [0] * n
+cnt = 0
 
 for i in range(n):
     for j in range(i, n):
-        temp = input.pop(0)
-        if temp == '+':
-            S[i][j] = 1
-        elif temp == '-':
-            S[i][j] = -1
-
-answer(0)
-print(*result)
+        tmp = inputs[cnt]
+        if tmp == '+':
+            s[i][j] = 1
+        elif tmp == '-':
+            s[i][j] = -1
+        else:
+            s[i][j] = 0
+        cnt += 1
+solve(0)
+print(*answer)
