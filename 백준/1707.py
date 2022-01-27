@@ -1,35 +1,40 @@
 import sys
 from collections import deque
 
-def visitable(nx, ny):
-    return 0 <= nx < n and 0 <= ny < n
 
-def bfs(sa, sb, ta, tb):
+def bfs(v):
     q = deque()
-    q.append([sa, sb])
-    visited[sa][sb] = 1
+    bi[v] = 1
+    q.append(v)
 
     while q:
-        a, b = q.popleft()
+        w = q.popleft()
 
-        if a == ta and b == tb:
-            return visited[a][b] - 1
+        for i in graph[w]:
+            if bi[i] == 0:
+                bi[i] = -bi[w]
+                q.append(i)
+            elif bi[i] == bi[w]:
+                return False
 
-        for i in range(8):
-            nx = a + x[i]
-            ny = b + y[i]
+    return True
 
-            if visitable(nx, ny) and visited[nx][ny] == 0:
-                visited[nx][ny] = visited[a][b] + 1
-                q.append([nx, ny])
+k = int(sys.stdin.readline().rstrip())
 
-l = int(sys.stdin.readline().rstrip())
-x = [-2, -1, 2, 1, -2, -1, 2, 1]
-y = [-1, -2, -1, -2, 1, 2, 1, 2]
-for _ in range(l):
-    n = int(sys.stdin.readline().rstrip())
-    visited = [[0] * n for _ in range(n)]
-    sa, sb = map(int, sys.stdin.readline().split())
-    ta, tb = map(int, sys.stdin.readline().split())
+for _ in range(k):
+    n, m = map(int, sys.stdin.readline().split())
+    graph = [[] for _ in range(n+1)]
+    bi = [0] * (n+1)
 
-    print(bfs(sa, sb, ta, tb))
+    for i in range(m):
+        a, b = map(int, sys.stdin.readline().split())
+        graph[a].append(b)
+        graph[b].append(a)
+
+    ok = True
+    for i in range(1, n+1):
+        if bi[i] == 0:
+            if not bfs(i):
+                ok = False
+
+    print("YES" if ok else "NO")
