@@ -1,6 +1,7 @@
 import sys
 from collections import deque
 
+
 def bfs(v):
     q = deque()
     q.append(v)
@@ -9,13 +10,13 @@ def bfs(v):
     while q:
         w = q.popleft()
 
-        for nx in (w-1, w+1, w*2):
-            if 0 <= nx <= 100000 and dist[nx] == -1:
-                dist[nx] = dist[w] + 1
-                q.append(nx)
+        for i in (w+1, w-1, 2*w):
+            if 0 <= i <= 200000 and dist[i] == -1:
+                dist[i] = dist[w] + 1
+                q.append(i)
 
 n, m = map(int, sys.stdin.readline().split())
-input = [i+1 for i in range(m)]
-dist = [-1] * (100001)
+dist = [-1] * 200001
+
 bfs(n)
 print(dist[m])
