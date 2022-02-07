@@ -1,21 +1,35 @@
 import sys
 input = sys.stdin.readline
 
-check = [0] * 2000001
-def solve(sum, index):
-    if index == n:
-        check[sum] = 1
-        return
-
-    solve(sum+inputs[index], index+1)
-    solve(sum, index+1)
+# def solve(index, s):
+#     if index == n:
+#         c[s] = 1
+#         return
+#
+#     solve(index+1, s + inputs[index])
+#     solve(index + 1, s)
+#
+# n = int(input().rstrip())
+# inputs = list(map(int, input().split()))
+# c = [0] * 2000001
+# solve(0, 0)
+# for i in range(1, 2000001):
+#     if not c[i]:
+#         print(i)
+#         break
 
 n = int(input().rstrip())
 inputs = list(map(int, input().split()))
+total = (1 << n)
+c = [0] * 2000001
+for i in range(total):
+    sum = 0
+    for j in range(n):
+        if i & (1 << j):
+            sum += inputs[j]
 
-solve(0, 0)
-
+    c[sum] = 1
 for i in range(1, 2000001):
-    if not check[i]:
+    if not c[i]:
         print(i)
         break
