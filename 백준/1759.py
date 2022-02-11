@@ -1,39 +1,31 @@
 import sys
+def moJaCheck(pwd):
+    mo, ja = 0, 0
+    for i in pwd:
+        if i in 'aeiou':
+            mo += 1
+        else:
+            ja += 1
+    return mo >= 1 and ja >= 2
 
-def dfs(s):
-    global M, J
-
-    if len(s) == n:
-        for i in s:
-            if i in ['a','e','i','o','u']:
-                M += 1
-            else:
-                J += 1
-
-        if M >= 1 and J >= 2:
-            for i in s:
-                print(i, end='')
-            print()
-        M = 0
-        J = 0
+def solve(pwd, index):
+    if len(pwd) == n:
+        if moJaCheck(pwd):
+            answer.append(''.join(map(str, pwd)))
         return
 
-    for i in range(m):
-        if not visited[i]:
-            if s[-1] > input[i]:
-                continue
-            visited[i] = 1
-            s.append(input[i])
-            dfs(s)
-            visited[i] = 0
-            s.pop()
+    if len(pwd) != n and index == m:
+        return
+
+    solve(pwd + [alpha[index]], index + 1)
+    solve(pwd, index+1)
 
 n, m = map(int, sys.stdin.readline().split())
-input = list(sys.stdin.readline().split())
-input.sort()
-visited = [0] * m
-M, J = 0, 0
-for i in range(m):
-    visited[i] = 1
-    dfs([input[i]])
-    visited[i] = 0
+alpha = list(sys.stdin.readline().split())
+check = [0] * m
+answer = []
+alpha.sort()
+
+solve([], 0)
+
+print('\n'.join(map(str, answer)))
