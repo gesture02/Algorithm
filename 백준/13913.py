@@ -1,5 +1,12 @@
 import sys
 from collections import deque
+sys.setrecursionlimit(1000000)
+
+def printResult(n, m):
+    if n != m:
+        printResult(n, result[m])
+
+    print(m, end = ' ')
 
 def bfs(v):
     q = deque()
@@ -8,21 +15,17 @@ def bfs(v):
 
     while q:
         w = q.popleft()
-        if w == m:
-            nw = m
-            for i in range(dist[m] + 1):
-                result.append(nw)
-                nw = path[nw]
-            return
-        for nx in (w-1, w+1, w*2):
-            if 0 <= nx <= 100000 and dist[nx] == -1:
-                dist[nx] = dist[w] + 1
-                path[nx] = w
-                q.append(nx)
+
+        for i in (w+1, w-1, 2*w):
+            if 0 <= i <= 200000 and dist[i] == -1:
+                dist[i] = dist[w] + 1
+                result[i] = w
+                q.append(i)
+
 n, m = map(int, sys.stdin.readline().split())
-dist = [-1] * 100001
-path = [0] * 100001
-result = []
+dist = [-1] * 200001
+result = [0] * 200001
+
 bfs(n)
 print(dist[m])
-print(*list(reversed(result)))
+printResult(n, m)
